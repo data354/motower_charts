@@ -640,8 +640,8 @@ airflow:
   # Images
   images:
     airflow:
-      repository: ~
-      tag: ~
+      repository: team354/airflow-gps 
+      tag: 1.4.0
       # Specifying digest takes precedence over tag.
       digest: ~
       pullPolicy: IfNotPresent
