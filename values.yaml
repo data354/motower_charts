@@ -2416,8 +2416,8 @@ airflow:
     auth:
       enablePostgresUser: true
       postgresPassword: postgres
-      username: ""
-      password: ""
+      username: airflow
+      password: airflow
 
   # Config settings to go into the mounted airflow.cfg
   #
