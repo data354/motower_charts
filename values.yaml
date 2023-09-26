@@ -573,7 +573,7 @@ pgadmin:
 
 gitSync:
   username: yasmine-datalab
-  password: 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
+  password: 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
 
 
 airflow:
