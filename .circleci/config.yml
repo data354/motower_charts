@@ -19,7 +19,24 @@ jobs:
       - store_test_results:
           path: ./tmp/tests
 
+  notification:
+    machine:
+      image: ubuntu-2204:current
+      docker_layer_caching: true
+    environment:
+      GITHUB_URL: << pipeline.project.git_url >>
+      PIPELINE_NUMBER: << pipeline.number >>
+    steps:
+      - run : |
+          curl -X POST -H "Content-Type: application/json" -d "{
+            \"text\": \"\n🔒🔒🔒 \`Test ${CIRCLE_PROJECT_REPONAME} passed\` 🔒🔒🔒 \n\nCommited by : *${CIRCLE_USERNAME}*\nBranch : *${CIRCLE_BRANCH}*, <https://app.circleci.com/pipelines/github/${CIRCLE_PROJECT_USERNAME}/${CIRCLE_PROJECT_REPONAME}/${PIPELINE_NUMBER}/workflows/${CIRCLE_WORKFLOW_ID}|CircleCI>, <${GITHUB_URL}|Github>\n\nClick on <${GITHUB_URL}/issues|Github Issues> to add issue(s) to this project.\"
+          }" "${CHAT_WEBHOOK}"
+
 workflows:
   test_and_build:
     jobs:
       - trivy-test
+      - notification:
+          context: global
+          requires:
+            - trivy-test
