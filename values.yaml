@@ -254,7 +254,7 @@ pg:
       labels: {}
       mountPath: /bitnami/postgresql
       selector: {}
-      size: 500Gi
+      size: 30Gi
       storageClass: ""
       subPath: ""
     pgHbaConfiguration: ""
@@ -523,7 +523,7 @@ pgadmin:
     - ReadWriteOnce
     annotations: {}
     enabled: true
-    size: 10Gi
+    size: 20Gi
   podAnnotations: {}
   podLabels: {}
   priorityClassName: ""
