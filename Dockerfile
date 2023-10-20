@@ -1,4 +1,4 @@
-FROM apache/airflow:2.5.3
+FROM apache/airflow:latest
 LABEL maintainer="Data354"
 LABEL airflow-version="2.5.3"
 #Ce paramètre empêche le masquage des erreurs dans un pipeline

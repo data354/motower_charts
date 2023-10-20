@@ -86,9 +86,9 @@ pg:
     digest: ""
     pullPolicy: IfNotPresent
     pullSecrets: []
-    registry: docker.io
-    repository: bitnami/postgresql
-    tag: 15.2.0-debian-11-r13
+    registry: harbor-registry.ocitnetad.ci
+    repository: motower/postgresql
+    tag: latest
   kubeVersion: ""
   ldap:
     basedn: ""
@@ -122,9 +122,9 @@ pg:
       digest: ""
       pullPolicy: IfNotPresent
       pullSecrets: []
-      registry: docker.io
-      repository: bitnami/postgres-exporter
-      tag: 0.11.1-debian-11-r69
+      registry: harbor-registry.ocitnetad.ci
+      repository: motower/postgres-exporter
+      tag: latest
     livenessProbe:
       enabled: true
       failureThreshold: 6
@@ -254,7 +254,7 @@ pg:
       labels: {}
       mountPath: /bitnami/postgresql
       selector: {}
-      size: 30Gi
+      size: 100Gi                       # valeur initiale "500Gi"
       storageClass: ""
       subPath: ""
     pgHbaConfiguration: ""
@@ -274,10 +274,12 @@ pg:
       successThreshold: 1
       timeoutSeconds: 5
     resources:
-      limits: {}
-      requests:
-        cpu: 250m
-        memory: 256Mi
+      limits: 
+      	cpu: 500m
+      	memory: 500Mi
+      #requests:
+      #  cpu: 100m
+      #  memory: 256Mi
     schedulerName: ""
     service:
       annotations: {}
@@ -451,9 +453,9 @@ pg:
       digest: ""
       pullPolicy: IfNotPresent
       pullSecrets: []
-      registry: docker.io
-      repository: bitnami/bitnami-shell
-      tag: 11-debian-11-r98
+      registry: harbor-registry.ocitnetad.ci
+      repository: motower/bitnami-shell
+      tag: latest
     resources:
       limits: {}
       requests: {}
@@ -479,7 +481,7 @@ pgadmin:
   env:
     email: admin@gps.com
     enhanced_cookie_protection: "False"
-    password: SuperSecret
+    password: 6Sfa6MTpt96dY2D9Jv5c      # valeur initiale "SuperSecret"
     variables: []
   envVarsFromConfigMaps: []
   envVarsFromSecrets: []
@@ -493,9 +495,9 @@ pgadmin:
   extraVolumes: []
   image:
     pullPolicy: IfNotPresent
-    registry: docker.io
-    repository: dpage/pgadmin4
-    tag: ""
+    registry: harbor-registry.ocitnetad.ci
+    repository: motower/pgadmin4
+    tag: latest
   ingress:
     annotations: {}
     enabled: false
@@ -506,7 +508,10 @@ pgadmin:
         pathType: Prefix
     tls: []
   init:
-    resources: {}
+    resources: 
+      limits:
+        cpu: 100m
+        memory: 128Mi
   livenessProbe:
     failureThreshold: 3
     initialDelaySeconds: 30
@@ -523,7 +528,7 @@ pgadmin:
     - ReadWriteOnce
     annotations: {}
     enabled: true
-    size: 20Gi
+    size: 10Gi
   podAnnotations: {}
   podLabels: {}
   priorityClassName: ""
@@ -560,8 +565,8 @@ pgadmin:
   strategy: {}
   test:
     image:
-      registry: docker.io
-      repository: busybox
+      registry: harbor-registry.ocitnetad.ci
+      repository: motower/busybox
       tag: latest
     resources: {}
     securityContext:
@@ -572,8 +577,8 @@ pgadmin:
 
 
 gitSync:
-  username: yasmine-datalab
-  password: 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
+  username:   
+  password: 
 
 
 airflow:
@@ -640,8 +645,8 @@ airflow:
   # Images
   images:
     airflow:
-      repository: team354/airflow-with-root
-      tag: latest
+      repository: harbor-registry.ocitnetad.ci/motower/team354-airflow-with-root
+      tag: oci
       # Specifying digest takes precedence over tag.
       digest: ~
       pullPolicy: IfNotPresent
@@ -943,9 +948,9 @@ airflow:
     # Otherwise pass connection values in
     metadataConnection:
       user: postgres
-      pass: postgres
+      pass: gpsadminpassword
       protocol: postgresql
-      host: ~
+      host: datastack-pg
       port: 5432
       db: postgres
       sslmode: disable
@@ -1138,9 +1143,9 @@ airflow:
       #   memory: 128Mi
 
     resources: {}
-    #  limits:
-    #   cpu: 100m
-    #   memory: 128Mi
+      limits:
+       cpu: 500m
+       memory: 1024Mi
     #  requests:
     #   cpu: 100m
     #   memory: 128Mi
@@ -1293,9 +1298,9 @@ airflow:
         maxUnavailable: 1
 
     resources: {}
-    #  limits:
-    #   cpu: 100m
-    #   memory: 128Mi
+      limits:
+       cpu: 100m
+       memory: 128Mi
     #  requests:
     #   cpu: 100m
     #   memory: 128Mi
@@ -1599,9 +1604,9 @@ airflow:
           - port: "{{ .Values.ports.airflowUI }}"
 
     resources: {}
-    #   limits:
-    #     cpu: 100m
-    #     memory: 128Mi
+       limits:
+         cpu: 100m
+         memory: 128Mi
     #   requests:
     #     cpu: 100m
     #     memory: 128Mi
@@ -1614,7 +1619,7 @@ airflow:
       email: admin@example.com
       firstName: admin
       lastName: user
-      password: admin
+      password: 6Sfa6MTpt96dY2D9Jv5c              # valeur initiale "admin"
 
     # Launch additional containers into webserver.
     extraContainers: []
@@ -1775,9 +1780,9 @@ airflow:
       annotations: {}
 
     resources: {}
-    #  limits:
-    #   cpu: 100m
-    #   memory: 128Mi
+      limits:
+       cpu: 100m
+       memory: 128Mi
     #  requests:
     #   cpu: 100m
     #   memory: 128Mi
@@ -2080,9 +2085,9 @@ airflow:
     # Additional network policies as needed
     extraNetworkPolicies: []
     resources: {}
-    #   limits:
-    #     cpu: 100m
-    #     memory: 128Mi
+       limits:
+         cpu: 100m
+         memory: 128Mi
     #   requests:
     #     cpu: 100m
     #     memory: 128Mi
@@ -2274,9 +2279,9 @@ airflow:
       annotations: {}
 
     resources: {}
-    #  limits:
-    #   cpu: 100m
-    #   memory: 128Mi
+      limits:
+       cpu: 100m
+       memory: 128Mi
     #  requests:
     #   cpu: 100m
     #   memory: 128Mi
@@ -2410,7 +2415,7 @@ airflow:
   # Configuration for postgresql subchart
   # Not recommended for production
   postgresql:
-    enabled: true
+    enabled: false
     image:
       tag: "11"
     auth:
@@ -2548,7 +2553,7 @@ airflow:
       # git repo clone url
       # ssh example: git@github.com:apache/airflow.git
       # https example: https://github.com/apache/airflow.git
-      repo: https://github.com/data354/OCI-JOBS.git
+      repo: http://gitlab_analytics.ocitnetad.ci/rentabilit-des-sites-ran/motower/airflow-job.git
       branch: master
       rev: HEAD
       depth: 1
@@ -2556,7 +2561,7 @@ airflow:
       maxFailures: 0
       # subpath within the repo where dags are located
       # should be "" if dags are at repo root
-      subPath: "airflow/dags"
+      subPath: "dags"
       # if your repo needs a user name password
       # you can load them to a k8s secret like the one below
       #   ---
@@ -2611,9 +2616,9 @@ airflow:
       #   value: ""
 
       resources: {}
-      #  limits:
-      #   cpu: 100m
-      #   memory: 128Mi
+        limits:
+         cpu: 100m
+         memory: 128Mi
       #  requests:
       #   cpu: 100m
       #   memory: 128Mi
@@ -2623,7 +2628,7 @@ airflow:
       # Enable persistent volume for storing logs
       enabled: false
       # Volume size for logs
-      size: 100Gi
+      size: 20Gi                                   #valeur initiale "100Gi"
       # Annotations for the logs PVC
       annotations: {}
       # If using a custom storageClass, pass name here
