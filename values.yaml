@@ -745,7 +745,10 @@ airflow:
     jobAnnotations: {}
     labels: {}
     nodeSelector: {}
-    resources: {}
+    resources: 
+      limits:
+       cpu: 100m
+       memory: 128Mi
     securityContext: {}
     serviceAccount:
       annotations: {}
@@ -1043,7 +1046,10 @@ airflow:
     extraVolumes: []
     jobAnnotations: {}
     nodeSelector: {}
-    resources: {}
+    resources: 
+      limits:
+        cpu: 100m
+        memory: 128Mi
     securityContext: {}
     serviceAccount:
       annotations: {}
