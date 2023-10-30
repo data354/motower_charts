@@ -275,8 +275,8 @@ pg:
       timeoutSeconds: 5
     resources:
       limits: 
-      	cpu: 500m
-      	memory: 500Mi
+       cpu: 500m
+       memory: 500Mi
       #requests:
       #  cpu: 100m
       #  memory: 256Mi
