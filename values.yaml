@@ -1825,7 +1825,8 @@ airflow:
       ports:
       - name: airflow-ui
         port: '{{ .Values.ports.airflowUI }}'
-      type: ClusterIP
+        nodePort: 30008
+      type: NodePort
     serviceAccount:
       annotations: {}
       create: true
