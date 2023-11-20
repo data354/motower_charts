@@ -86,9 +86,9 @@ pg:
     digest: ""
     pullPolicy: IfNotPresent
     pullSecrets: []
-    registry: docker.io
-    repository: bitnami/postgresql
-    tag: 15.2.0-debian-11-r13
+    registry: harbor-registry.ocitnetad.ci
+    repository: motower/postgresql
+    tag: latest
   kubeVersion: ""
   ldap:
     basedn: ""
@@ -122,9 +122,9 @@ pg:
       digest: ""
       pullPolicy: IfNotPresent
       pullSecrets: []
-      registry: docker.io
-      repository: bitnami/postgres-exporter
-      tag: 0.11.1-debian-11-r69
+      registry: harbor-registry.ocitnetad.ci
+      repository: motower/postgres-exporter
+      tag: latest
     livenessProbe:
       enabled: true
       failureThreshold: 6
@@ -145,8 +145,12 @@ pg:
       successThreshold: 1
       timeoutSeconds: 5
     resources:
-      limits: {}
-      requests: {}
+      limits: 
+       cpu: 100m
+       memory: 124Mi
+      requests: 
+       cpu: 100m
+       memory: 124m
     service:
       annotations:
         prometheus.io/port: '{{ .Values.metrics.service.ports.metrics }}'
@@ -254,7 +258,7 @@ pg:
       labels: {}
       mountPath: /bitnami/postgresql
       selector: {}
-      size: 30Gi
+      size: 10Gi                       # valeur initiale "500Gi"
       storageClass: ""
       subPath: ""
     pgHbaConfiguration: ""
@@ -274,10 +278,12 @@ pg:
       successThreshold: 1
       timeoutSeconds: 5
     resources:
-      limits: {}
+      limits: 
+       cpu: 500m
+       memory: 500Mi
       requests:
-        cpu: 250m
-        memory: 256Mi
+        cpu: 500m
+        memory: 500Mi
     schedulerName: ""
     service:
       annotations: {}
@@ -451,11 +457,13 @@ pg:
       digest: ""
       pullPolicy: IfNotPresent
       pullSecrets: []
-      registry: docker.io
-      repository: bitnami/bitnami-shell
-      tag: 11-debian-11-r98
+      registry: harbor-registry.ocitnetad.ci
+      repository: motower/bitnami-shell
+      tag: latest
     resources:
-      limits: {}
+      limits: 
+       cpu: 100m
+       memory: 124Mi
       requests: {}
 
 
@@ -479,7 +487,7 @@ pgadmin:
   env:
     email: admin@gps.com
     enhanced_cookie_protection: "False"
-    password: SuperSecret
+    password: 6Sfa6MTpt96dY2D9Jv5c      # valeur initiale "SuperSecret"
     variables: []
   envVarsFromConfigMaps: []
   envVarsFromSecrets: []
@@ -493,9 +501,9 @@ pgadmin:
   extraVolumes: []
   image:
     pullPolicy: IfNotPresent
-    registry: docker.io
-    repository: dpage/pgadmin4
-    tag: ""
+    registry: harbor-registry.ocitnetad.ci
+    repository: motower/pgadmin4
+    tag: latest
   ingress:
     annotations: {}
     enabled: false
@@ -506,7 +514,10 @@ pgadmin:
         pathType: Prefix
     tls: []
   init:
-    resources: {}
+    resources: 
+     limits:
+      cpu: 256m
+      memory: 256Mi
   livenessProbe:
     failureThreshold: 3
     initialDelaySeconds: 30
@@ -523,7 +534,7 @@ pgadmin:
     - ReadWriteOnce
     annotations: {}
     enabled: true
-    size: 20Gi
+    size: 10Gi
   podAnnotations: {}
   podLabels: {}
   priorityClassName: ""
@@ -534,7 +545,10 @@ pgadmin:
     successThreshold: 1
     timeoutSeconds: 15
   replicaCount: 1
-  resources: {}
+  resources: 
+   limits:
+    cpu: 256m
+    memory: 256Mi
   secretKeys:
     pgadminPasswordKey: password
   securityContext:
@@ -560,10 +574,13 @@ pgadmin:
   strategy: {}
   test:
     image:
-      registry: docker.io
-      repository: busybox
+      registry: harbor-registry.ocitnetad.ci
+      repository: motower/busybox
       tag: latest
-    resources: {}
+    resources:
+     limits:
+      cpu: 256m
+      memory: 256Mi
     securityContext:
       fsGroup: 5051
       runAsGroup: 5051
@@ -572,8 +589,8 @@ pgadmin:
 
 
 gitSync:
-  username: yasmine-datalab
-  password: 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
+  username:   
+  password: 
 
 
 airflow:
@@ -640,8 +657,8 @@ airflow:
   # Images
   images:
     airflow:
-      repository: team354/airflow-with-root
-      tag: latest
+      repository: team354/airflow-with-root 
+      tag: 2.6.1
       # Specifying digest takes precedence over tag.
       digest: ~
       pullPolicy: IfNotPresent
@@ -1051,8 +1068,8 @@ airflow:
     # worker and let Kubernetes restart it
     livenessProbe:
       enabled: true
-      initialDelaySeconds: 10
-      timeoutSeconds: 20
+      initialDelaySeconds: 20
+      timeoutSeconds: 100
       failureThreshold: 5
       periodSeconds: 60
       command: ~
@@ -1129,21 +1146,21 @@ airflow:
     kerberosSidecar:
       # Enable kerberos sidecar
       enabled: false
-      resources: {}
-      #  limits:
-      #   cpu: 100m
-      #   memory: 128Mi
-      #  requests:
-      #   cpu: 100m
-      #   memory: 128Mi
+      resources: 
+        limits:
+         cpu: 100m
+         memory: 128Mi
+        requests:
+         cpu: 100m
+         memory: 128Mi
 
-    resources: {}
-    #  limits:
-    #   cpu: 100m
-    #   memory: 128Mi
-    #  requests:
-    #   cpu: 100m
-    #   memory: 128Mi
+    resources: 
+      limits:
+       cpu: "1"
+       memory: "4Gi"
+      requests:
+       cpu: "1"
+       memory: "4Gi"
 
     # Grace period for tasks to finish after SIGTERM is sent from kubernetes
     terminationGracePeriodSeconds: 600
@@ -1217,13 +1234,13 @@ airflow:
       args: ["bash", "/clean-logs"]
       # Number of days to retain logs
       retentionDays: 15
-      resources: {}
-      #  limits:
-      #   cpu: 100m
-      #   memory: 128Mi
-      #  requests:
-      #   cpu: 100m
-      #   memory: 128Mi
+      resources: 
+        limits:
+         cpu: 100m
+         memory: 128Mi
+        requests:
+         cpu: 100m
+         memory: 128Mi
 
     waitForMigrations:
       env: []
@@ -1292,14 +1309,13 @@ airflow:
       config:
         maxUnavailable: 1
 
-    resources: {}
-    #  limits:
-    #   cpu: 100m
-    #   memory: 128Mi
-    #  requests:
-    #   cpu: 100m
-    #   memory: 128Mi
-
+    resources: 
+      limits:
+       cpu: 0.4
+       memory: 15Gi
+      requests:
+       cpu: 0.4
+       memory: 15Gi
     # This setting tells kubernetes that its ok to evict
     # when it wants to scale a node down.
     safeToEvict: true
@@ -1358,13 +1374,13 @@ airflow:
       args: ["bash", "/clean-logs"]
       # Number of days to retain logs
       retentionDays: 15
-      resources: {}
-      #  limits:
-      #   cpu: 100m
-      #   memory: 128Mi
-      #  requests:
-      #   cpu: 100m
-      #   memory: 128Mi
+      resources: 
+        limits:
+         cpu: 100m
+         memory: 128Mi
+        requests:
+         cpu: 100m
+         memory: 128Mi
 
     waitForMigrations:
       # Whether to create init container to wait for db migrations
@@ -1444,13 +1460,13 @@ airflow:
 
     env: []
 
-    resources: {}
-    #  limits:
-    #   cpu: 100m
-    #   memory: 128Mi
-    #  requests:
-    #   cpu: 100m
-    #   memory: 128Mi
+    resources: 
+      limits:
+       cpu: 100m
+       memory: 128Mi
+      requests:
+       cpu: 100m
+       memory: 128Mi
 
   # Airflow database migration job settings
   migrateDatabaseJob:
@@ -1490,13 +1506,13 @@ airflow:
       # Annotations to add to migrate database job kubernetes service account.
       annotations: {}
 
-    resources: {}
-    #  limits:
-    #   cpu: 100m
-    #   memory: 128Mi
-    #  requests:
-    #   cpu: 100m
-    #   memory: 128Mi
+    resources: 
+      limits:
+       cpu: 100m
+       memory: 128Mi
+      requests:
+       cpu: 100m
+       memory: 128Mi
 
     # Launch additional containers into database migration job
     extraContainers: []
@@ -1537,15 +1553,15 @@ airflow:
     #      - "foo.remote"
     allowPodLogReading: true
     livenessProbe:
-      initialDelaySeconds: 15
-      timeoutSeconds: 30
+      initialDelaySeconds: 25
+      timeoutSeconds: 100
       failureThreshold: 20
       periodSeconds: 5
       scheme: HTTP
 
     readinessProbe:
       initialDelaySeconds: 15
-      timeoutSeconds: 30
+      timeoutSeconds: 100
       failureThreshold: 20
       periodSeconds: 5
       scheme: HTTP
@@ -1598,13 +1614,13 @@ airflow:
         ports:
           - port: "{{ .Values.ports.airflowUI }}"
 
-    resources: {}
-    #   limits:
-    #     cpu: 100m
-    #     memory: 128Mi
-    #   requests:
-    #     cpu: 100m
-    #     memory: 128Mi
+    resources: 
+       limits:
+         cpu: 0.8
+         memory: 2Gi
+       requests:
+         cpu: 0.8
+         memory: 2Gi
 
     # Create initial user.
     defaultUser:
@@ -1614,7 +1630,7 @@ airflow:
       email: admin@example.com
       firstName: admin
       lastName: user
-      password: admin
+      password: 6Sfa6MTpt96dY2D9Jv5c              # valeur initiale "admin"
 
     # Launch additional containers into webserver.
     extraContainers: []
@@ -1774,13 +1790,13 @@ airflow:
       # Annotations to add to triggerer volumes
       annotations: {}
 
-    resources: {}
-    #  limits:
-    #   cpu: 100m
-    #   memory: 128Mi
-    #  requests:
-    #   cpu: 100m
-    #   memory: 128Mi
+    resources: 
+      limits:
+       cpu: 0.3
+       memory: 500Mi
+      requests:
+       cpu: 0.3
+       memory: 500Mi
 
     # Grace period for triggerer to finish after SIGTERM is sent from kubernetes
     terminationGracePeriodSeconds: 60
@@ -1832,10 +1848,10 @@ airflow:
       args: ["bash", "/clean-logs"]
       # Number of days to retain logs
       retentionDays: 15
-      resources: {}
-      #  limits:
-      #   cpu: 100m
-      #   memory: 128Mi
+      resources: 
+        limits:
+         cpu: 100m
+         memory: 128Mi
       #  requests:
       #   cpu: 100m
       #   memory: 128Mi
@@ -1892,10 +1908,10 @@ airflow:
     #  fsGroup: 0
     #  runAsGroup: 0
 
-    resources: {}
-    #  limits:
-    #   cpu: 100m
-    #   memory: 128Mi
+    resources: 
+      limits:
+       cpu: 100m
+       memory: 128Mi
     #  requests:
     #   cpu: 100m
     #   memory: 128Mi
@@ -1974,10 +1990,10 @@ airflow:
         ports:
           - port: "{{ .Values.ports.flowerUI }}"
 
-    resources: {}
-    #   limits:
-    #     cpu: 100m
-    #     memory: 128Mi
+    resources: 
+       limits:
+         cpu: 100m
+         memory: 128Mi
     #   requests:
     #     cpu: 100m
     #     memory: 128Mi
@@ -2079,13 +2095,13 @@ airflow:
 
     # Additional network policies as needed
     extraNetworkPolicies: []
-    resources: {}
-    #   limits:
-    #     cpu: 100m
-    #     memory: 128Mi
-    #   requests:
-    #     cpu: 100m
-    #     memory: 128Mi
+    resources: 
+       limits:
+         cpu: 100m
+         memory: 128Mi
+       requests:
+         cpu: 100m
+         memory: 128Mi
 
     service:
       extraAnnotations: {}
@@ -2188,7 +2204,11 @@ airflow:
     #   requests:
     #     cpu: 100m
     #     memory: 128Mi
-    resources: {}
+    resources: 
+     limits:
+      cpu: 100m
+      memory: 128Mi
+
 
     service:
       extraAnnotations: {}
@@ -2228,10 +2248,10 @@ airflow:
     uid: 65534
 
     metricsExporterSidecar:
-      resources: {}
-      #  limits:
-      #   cpu: 100m
-      #   memory: 128Mi
+      resources: 
+        limits:
+         cpu: 100m
+         memory: 128Mi
       #  requests:
       #   cpu: 100m
       #   memory: 128Mi
@@ -2273,13 +2293,13 @@ airflow:
       # Annotations to add to redis volumes
       annotations: {}
 
-    resources: {}
-    #  limits:
-    #   cpu: 100m
-    #   memory: 128Mi
-    #  requests:
-    #   cpu: 100m
-    #   memory: 128Mi
+    resources: 
+      limits:
+       cpu: 100m
+       memory: 128Mi
+      requests:
+       cpu: 100m
+       memory: 128Mi
 
     # If set use as redis secret. Make sure to also set data.brokerUrlSecretName value.
     passwordSecretName: ~
@@ -2377,10 +2397,10 @@ airflow:
     # Labels specific to cleanup objects and pods
     labels: {}
 
-    resources: {}
-    #  limits:
-    #   cpu: 100m
-    #   memory: 128Mi
+    resources: 
+      limits:
+       cpu: 100m
+       memory: 128Mi
     #  requests:
     #   cpu: 100m
     #   memory: 128Mi
@@ -2418,6 +2438,15 @@ airflow:
       postgresPassword: postgres
       username: airflow
       password: airflow
+    primary:
+     resources:
+      limits:
+       cpu: 500m
+       memory: 500Mi
+      requests:
+        cpu: 256m
+        memory: 256Mi
+
 
   # Config settings to go into the mounted airflow.cfg
   #
@@ -2548,15 +2577,15 @@ airflow:
       # git repo clone url
       # ssh example: git@github.com:apache/airflow.git
       # https example: https://github.com/apache/airflow.git
-      repo: https://github.com/data354/OCI-JOBS.git
-      branch: master
+      repo: http://gitlab_analytics.ocitnetad.ci/rentabilit-des-sites-ran/motower/airflow-job.git
+      branch: preprod
       rev: HEAD
       depth: 1
       # the number of consecutive failures allowed before aborting
       maxFailures: 0
       # subpath within the repo where dags are located
       # should be "" if dags are at repo root
-      subPath: "airflow/dags"
+      subPath: "dags"
       # if your repo needs a user name password
       # you can load them to a k8s secret like the one below
       #   ---
@@ -2610,20 +2639,20 @@ airflow:
       # - name: ""
       #   value: ""
 
-      resources: {}
-      #  limits:
-      #   cpu: 100m
-      #   memory: 128Mi
-      #  requests:
-      #   cpu: 100m
-      #   memory: 128Mi
+      resources: 
+        limits:
+         cpu: 100m
+         memory: 128Mi
+        requests:
+         cpu: 100m
+         memory: 128Mi
 
   logs:
     persistence:
       # Enable persistent volume for storing logs
       enabled: false
       # Volume size for logs
-      size: 100Gi
+      size: 20Gi                                   #valeur initiale "100Gi"
       # Annotations for the logs PVC
       annotations: {}
       # If using a custom storageClass, pass name here
